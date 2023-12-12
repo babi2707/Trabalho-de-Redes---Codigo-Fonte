@@ -11,7 +11,7 @@ public class ClienteInterface extends JFrame {
     public ClienteInterface() {
         // Configurações básicas da janela
         setTitle("Interface do Cliente");
-        setSize(600, 400);
+        setSize(550, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -20,9 +20,9 @@ public class ClienteInterface extends JFrame {
         JPanel painelSuperior = new JPanel(new FlowLayout());
         JLabel ipServidorLabel = new JLabel("Endereco IPv4 do Servidor:");
         ipServidorField = new JTextField(15);
+        
+        // Definindo o valor fixo da porta como "6596"
         JLabel portaLabel = new JLabel("Porta:");
-
-        // Definindo o valor da porta como "6596"
         portaField = new String("6596");
 
         conectarButton = new JButton("Conectar");
@@ -42,16 +42,14 @@ public class ClienteInterface extends JFrame {
         add(painelSuperior, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Configura a ação do botão conectar
+        // Ação do botão conectar
         conectarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aqui você pode colocar a lógica de conexão com o servidor
-                // Utilizando os valores de IP e porta fornecidos
+
                 String ipServidor = ipServidorField.getText();
                 int porta = Integer.parseInt(portaField);
 
-                // Exemplo de exibição de mensagem na área de texto
                 mensagemArea.append("Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
             }
         });
