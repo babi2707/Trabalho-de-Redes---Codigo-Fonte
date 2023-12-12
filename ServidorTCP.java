@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServidorTCP {
-    private static int portaServidor = 6790;
+    private static int portaServidor = 6596;
     static int clienteContador = 0;
     private static List<PrintWriter> clientes = new ArrayList<>();
 

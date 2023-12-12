@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class ClienteTCP {
-    private static String ipServidor = "172.24.32.1";
+    private static String ipServidor = "192.168.0.16";
     private static int portaServidor = 6790;
 
     public static String lerString() throws Exception {
