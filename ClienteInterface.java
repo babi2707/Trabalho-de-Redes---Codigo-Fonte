@@ -54,6 +54,9 @@ public class ClienteInterface extends JFrame {
                 int porta = Integer.parseInt(portaField);
 
                 mensagemArea.append("Chat TCP\n" + "Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
+
+                conectarTCPButton.setEnabled(false);
+                conectarUDPButton.setEnabled(false);
             }
         });
 
@@ -66,6 +69,8 @@ public class ClienteInterface extends JFrame {
                 int porta = Integer.parseInt(portaField);
 
                 mensagemArea.append("Chat UDP\n" + "Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
+                conectarTCPButton.setEnabled(false);
+                conectarUDPButton.setEnabled(false);
             }
         });
     }
