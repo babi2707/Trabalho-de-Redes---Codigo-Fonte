@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServidorBarbara {
+public class ServidorTCP {
     private static int portaServidor = 6790;
     static int clienteContador = 0;
     private static List<PrintWriter> clientes = new ArrayList<>();
@@ -52,9 +52,9 @@ class ClienteHandler implements Runnable {
 
             String mensagem;
             while ((mensagem = entrada.readLine()) != null) {
-                System.out.println("Recebido do cliente " + ServidorBarbara.clienteContador + ": " + mensagem);
+                System.out.println("Recebido do cliente " + ServidorTCP.clienteContador + ": " + mensagem);
                 // Chama o método broadcast para enviar a mensagem a todos os clientes
-                ServidorBarbara.broadcast(mensagem);
+                ServidorTCP.broadcast(mensagem);
             }
         } catch (IOException e) {
             e.printStackTrace();

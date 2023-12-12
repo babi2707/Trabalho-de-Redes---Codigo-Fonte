@@ -3,7 +3,7 @@
 import java.io.*;
 import java.net.*;
 
-class Servidor {
+class ServidorUDP {
     private static int portaServidor = 6789;
 
     public static String lerString () throws Exception {

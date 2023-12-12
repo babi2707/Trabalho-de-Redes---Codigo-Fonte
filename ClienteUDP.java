@@ -1,9 +1,7 @@
-
-
 import java.io.*;
 import java.net.*;
 
-class Cliente {
+class ClienteUDP {
     
     private static String ipServidor = "192.168.5.178";
     private static int portaServidor = 6789;

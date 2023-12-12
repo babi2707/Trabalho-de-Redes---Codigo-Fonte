@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class ClienteBarbara {
+public class ClienteTCP {
     private static String ipServidor = "172.24.32.1";
     private static int portaServidor = 6790;
 
