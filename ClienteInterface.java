@@ -25,8 +25,10 @@ public class ClienteInterface extends JFrame {
 
         // Painel para campos e botão
         JPanel painelSuperior = new JPanel(new FlowLayout());
+        JPanel painelInferior = new JPanel(new FlowLayout());
         JLabel ipServidorLabel = new JLabel("Endereco IPv4 do Servidor:");
         ipServidorField = new JTextField(15);
+        mensagemEnviarField = new JTextField(30);
 
         // Definindo o valor fixo da porta como "6596"
         JLabel portaLabel = new JLabel("Porta:");
@@ -34,6 +36,7 @@ public class ClienteInterface extends JFrame {
 
         conectarTCPButton = new JButton("Conectar TCP");
         conectarUDPButton = new JButton("Conectar UDP");
+        enviarButton = new JButton("Enviar");
 
         painelSuperior.add(ipServidorLabel);
         painelSuperior.add(ipServidorField);
@@ -50,33 +53,26 @@ public class ClienteInterface extends JFrame {
         // Adiciona os componentes à janela
         add(painelSuperior, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        add(painelInferior, BorderLayout.SOUTH);
+
+        painelInferior.add(mensagemEnviarField);
+        painelInferior.add(enviarButton);
+        enviarButton.setEnabled(false);
 
         // Ação do botão conectar com o chat TCP
         conectarTCPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
+                
                     String ipServidor = ipServidorField.getText();
                     int porta = Integer.parseInt(portaField);
 
                     mensagemArea
                             .append("Chat TCP\n" + "Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
 
-                    socket = new Socket(ipServidor, porta);
-
-                    BufferedReader entrada = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    saida = new PrintWriter(socket.getOutputStream(), true);
-
-                    Thread leituraThread = new Thread(new LeituraDoServidor(entrada));
-                    leituraThread.start();
-
                     conectarTCPButton.setEnabled(false);
                     conectarUDPButton.setEnabled(false);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor.", "Erro",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                    enviarButton.setEnabled(true);
             }
         });
 
