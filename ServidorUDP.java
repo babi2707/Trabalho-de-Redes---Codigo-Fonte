@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 
 class ServidorUDP {
-    private static int portaServidor = 6789;
+    private static int portaServidor = 6596;
 
     public static String lerString () throws Exception {
       BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

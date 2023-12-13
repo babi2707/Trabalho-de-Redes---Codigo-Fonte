@@ -1,12 +1,15 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServidorTCP {
+    public static final String clienteContador = null;
     private static int portaServidor = 6596;
-    static int clienteContador = 0;
-    private static List<PrintWriter> clientes = new ArrayList<>();
+    private static int contadorClientes = 0;
+    private static Map<Integer, PrintWriter> clientes = new HashMap<>();
 
     public static void main(String argv[]) throws Exception {
         try (ServerSocket serverSocket = new ServerSocket(portaServidor)) {
@@ -15,16 +18,16 @@ public class ServidorTCP {
             // Aceita múltiplos clientes
             while (true) {
                 Socket conexao = serverSocket.accept();
-                clienteContador++;
-                System.out.println("Cliente " + clienteContador + " conectado.");
+                PrintWriter clienteSaida = new PrintWriter(conexao.getOutputStream(), true);
+                clientes.put(contadorClientes, clienteSaida);
 
                 // Cria uma thread para lidar com cada cliente
-                Thread clientThread = new Thread(new ClienteHandler(conexao));
+                Thread clientThread = new Thread(new ClienteHandler(conexao, contadorClientes));
                 clientThread.start();
 
+                contadorClientes++;
                 // Adiciona o PrintWriter deste cliente à lista
-                PrintWriter clienteSaida = new PrintWriter(conexao.getOutputStream(), true);
-                clientes.add(clienteSaida);
+                System.out.println("Cliente " + contadorClientes + " conectado.");
             }
         }
     }
@@ -32,16 +35,17 @@ public class ServidorTCP {
     // Método para enviar a mensagem a todos os clientes
     public static void broadcast(String mensagem) {
         System.out.println("Enviando mensagem a todos os clientes: " + mensagem);
-        for (PrintWriter clienteSaida : clientes) {
-            clienteSaida.println("Cliente " + clienteContador + ": " + mensagem);
+        for (PrintWriter clienteSaida : clientes.values()) {
+            clienteSaida.println("Cliente " + contadorClientes + ": " + mensagem);
         }
     }
+    
 }
 
 class ClienteHandler implements Runnable {
     private Socket conexao;
 
-    public ClienteHandler(Socket conexao) {
+    public ClienteHandler(Socket conexao, int contadorClientes) {
         this.conexao = conexao;
     }
 

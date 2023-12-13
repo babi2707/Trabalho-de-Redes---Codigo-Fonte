@@ -89,6 +89,9 @@ public class ClienteInterface extends JFrame {
                 String mensagem = mensagemEnviarField.getText();
                 mensagemArea.append("Cliente: " + mensagem + "\n");
                 mensagemEnviarField.setText("");
+
+                Thread leituraThread = new Thread(new LeituraDoServidor(mensagem));
+            leituraThread.start();
             }
         });
 
@@ -96,13 +99,32 @@ public class ClienteInterface extends JFrame {
         conectarUDPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 String ipServidor = ipServidorField.getText();
                 int porta = Integer.parseInt(portaField);
-
-                mensagemArea.append("Chat UDP\n" + "Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
-                conectarTCPButton.setEnabled(false);
-                conectarUDPButton.setEnabled(false);
+        
+                DatagramSocket socket;
+                try {
+                    socket = new DatagramSocket();
+                    InetAddress ipServidorAddr = InetAddress.getByName(ipServidor);
+        
+                    String mensagem = "Olá do Cliente UDP";
+                    byte[] buffer = mensagem.getBytes();
+        
+                    DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length, ipServidorAddr, porta);
+                    socket.send(sendPacket);
+        
+                    byte[] receiveData = new byte[1024];
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    socket.receive(receivePacket);
+        
+                    String mensagemRecebida = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                    mensagemArea.append("Resposta do servidor UDP: " + mensagemRecebida + "\n");
+        
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor UDP.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
@@ -119,24 +141,24 @@ public class ClienteInterface extends JFrame {
 }
 
 class LeituraDoServidor implements Runnable {
-    private BufferedReader entrada;
-    private JTextArea mensagemArea;
+    private String entrada;
 
-    public LeituraDoServidor(BufferedReader entrada, JTextArea mensagemArea) {
-        this.entrada = entrada;
-        this.mensagemArea = mensagemArea;
+    public LeituraDoServidor(String mensagem) {
+        this.entrada = mensagem;
     }
 
     @Override
     public void run() {
         String mensagem;
+            StringReader stringReader = new StringReader(entrada);
+            BufferedReader bufferedReader = new BufferedReader(stringReader);
+
         try {
-            while ((mensagem = entrada.readLine()) != null) {
-                mensagemArea.append("Mensagem do servidor: " + mensagem + "\n");
+            while ((mensagem = bufferedReader.readLine()) != null) {
+                System.out.println("Mensagem do cliente: " + mensagem);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-

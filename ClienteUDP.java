@@ -3,8 +3,8 @@ import java.net.*;
 
 class ClienteUDP {
     
-    private static String ipServidor = "192.168.5.178";
-    private static int portaServidor = 6789;
+    private static String ipServidor = "10.250.9.93";
+    private static int portaServidor = 6596;
 
     public static String lerString () throws Exception {
       BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
