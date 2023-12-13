@@ -64,8 +64,11 @@ public class ClienteInterface extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
+                try{
                     String ipServidor = ipServidorField.getText();
                     int porta = Integer.parseInt(portaField);
+
+                    socket = new Socket(ipServidor, porta);
 
                     mensagemArea
                             .append("Chat TCP\n" + "Conectado ao servidor " + ipServidor + " na porta " + porta + "\n");
@@ -73,6 +76,19 @@ public class ClienteInterface extends JFrame {
                     conectarTCPButton.setEnabled(false);
                     conectarUDPButton.setEnabled(false);
                     enviarButton.setEnabled(true);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String mensagem = mensagemEnviarField.getText();
+                mensagemArea.append("Cliente: " + mensagem + "\n");
+                mensagemEnviarField.setText("");
             }
         });
 
@@ -101,3 +117,26 @@ public class ClienteInterface extends JFrame {
         });
     }
 }
+
+class LeituraDoServidor implements Runnable {
+    private BufferedReader entrada;
+    private JTextArea mensagemArea;
+
+    public LeituraDoServidor(BufferedReader entrada, JTextArea mensagemArea) {
+        this.entrada = entrada;
+        this.mensagemArea = mensagemArea;
+    }
+
+    @Override
+    public void run() {
+        String mensagem;
+        try {
+            while ((mensagem = entrada.readLine()) != null) {
+                mensagemArea.append("Mensagem do servidor: " + mensagem + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
